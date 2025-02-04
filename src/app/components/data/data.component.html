@@ -1,0 +1,93 @@
+<div class="container">
+
+    <div class="user-selection">
+      <label for="userSelect">Select User:</label>
+      <select id="userSelect" (change)="onUserChange($event)" class="border p-2 rounded">
+        <option value="" disabled selected>Select a user</option>
+        <option *ngFor="let user of users" [value]="user.userId">{{ user.userName }}</option>
+      </select>
+    </div>
+  
+ 
+    <div class="graph-table-container" *ngIf="selectedUserId">
+      
+      <div class="chart-container">
+        <google-chart 
+          [type]="chartType" 
+          [data]="chartData" 
+          [options]="chartOptions"
+          (select)="onChartClick($event)">
+        </google-chart>
+      </div>
+  
+    
+      <div class="table-container">
+        <h3>Phone Details</h3>
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Call ID</th>
+              <th>Account Name</th>
+              <th>Call Date</th>
+              <th>Call Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let call of paginatedCalls">
+              <td>{{ call.id }}</td>
+              <td>{{ call.account?.name || 'Unknown' }}</td>
+              <td>{{ call.callDate | date:'dd/MM/yyyy' }}</td>
+              <td>{{ call.callType }}</td>
+            </tr>
+          </tbody>
+        </table>
+  
+       
+        <div class="pagination">
+          <button 
+            *ngFor="let page of getPaginationRange(filteredCalls.length)" 
+            (click)="changePageCalls(page)"
+            [class.active]="page === currentPageCalls">
+            {{ page }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <p class="not-show" *ngIf="!selectedUserId">Please select a user to View Analytics</p>
+ 
+  
+    <p class="not-show" *ngIf="!selectedUserId">Please select a user to new accounts details</p>
+    <div class="full-table" *ngIf="selectedUserId">
+      <h2 class="table-title">User's Territory Account Details</h2>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Account Name</th>
+            <th>Total Calls</th>
+            <th>Total Emails</th>
+            <th>Latest Call Date</th>
+            <th>Latest Email Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let account of paginatedAccounts">
+            <td>{{ account.name }}</td>
+            <td>{{ getTotalCalls(account.id) }}</td>
+            <td>{{ getTotalEmails(account.id) }}</td>
+            <td>{{ getLatestCallDate(account.id) }}</td>
+            <td>{{ getLatestEmailDate(account.id) }}</td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <div class="pagination">
+        <button 
+          *ngFor="let page of getPaginationRange(filteredAccounts.length)" 
+          (click)="changePageAccounts(page)"
+          [class.active]="page === currentPageAccounts">
+          {{ page }}
+        </button>
+      </div>
+    </div>
+  </div>
+  
