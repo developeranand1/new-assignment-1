@@ -29,7 +29,7 @@
               <th>Call ID</th>
               <th>Account Name</th>
               <th>Call Date</th>
-              <th>Call Type</th>
+              <th>Call Status</th>
             </tr>
           </thead>
           <tbody>
@@ -37,7 +37,7 @@
               <td>{{ call.id }}</td>
               <td>{{ call.account?.name || 'Unknown' }}</td>
               <td>{{ call.callDate | date:'dd/MM/yyyy' }}</td>
-              <td>{{ call.callType }}</td>
+              <td>{{ call.callStatus }}</td>
             </tr>
           </tbody>
         </table>
